@@ -19,7 +19,7 @@ tesla:
 # corresponder a um dos termos); listas vazias = sem restrição nessa categoria.
 # As correspondências são por substring, sem distinguir maiúsculas/minúsculas.
 filters:
-  price_max: null              # ex: 45000
+  price_max: 47000
   price_min: null
   trim_contains: []            # ex: ["Long Range", "Performance"]
   exterior_contains: []        # ex: ["Pearl White", "Deep Blue Metallic"]
