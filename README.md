@@ -93,6 +93,11 @@ python main.py --test-notify
 # Corre uma verificação única
 python main.py --once
 
+# Corre uma verificação única e envia também uma mensagem "sem unidades
+# disponíveis" se não houver nada a corresponder aos critérios (útil para
+# confirmar que o agente está mesmo a correr, mesmo sem stock disponível)
+python main.py --once --notify-empty
+
 # Corre em loop contínuo (usa polling.interval_seconds do config.yaml)
 python main.py
 

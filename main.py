@@ -33,6 +33,11 @@ def main():
         metavar="PATH",
         help="Guarda a resposta bruta da API Tesla neste ficheiro (útil para depurar filtros)",
     )
+    parser.add_argument(
+        "--notify-empty",
+        action="store_true",
+        help="Envia também uma mensagem quando não há nenhuma unidade disponível (query negativa)",
+    )
     args = parser.parse_args()
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
@@ -60,7 +65,9 @@ def main():
 
     if args.once:
         try:
-            matches = monitor.run_once(cfg, notifiers, state_path, listing_url)
+            matches = monitor.run_once(
+                cfg, notifiers, state_path, listing_url, notify_on_empty=args.notify_empty
+            )
         except Exception:
             logger.exception("Erro durante a verificação de inventário")
             raise SystemExit(1)
@@ -71,7 +78,9 @@ def main():
     logger.info("A iniciar loop de monitorização contínuo (intervalo: %ds)", interval)
     while True:
         try:
-            matches = monitor.run_once(cfg, notifiers, state_path, listing_url)
+            matches = monitor.run_once(
+                cfg, notifiers, state_path, listing_url, notify_on_empty=args.notify_empty
+            )
             if matches:
                 logger.info("Notificados %d veículo(s) novo(s)", len(matches))
         except Exception:
