@@ -34,7 +34,16 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           WHATSAPP_PHONE: ${{ secrets.WHATSAPP_PHONE }}
           CALLMEBOT_APIKEY: ${{ secrets.CALLMEBOT_APIKEY }}
-        run: python main.py --once --config config.yaml
+        # --notify-empty só é usado quando o workflow é disparado manualmente
+        # (botão "Run workflow"), para confirmares que a verificação correu
+        # mesmo sem unidades disponíveis. No cron agendado fica em silêncio
+        # quando não há novidades, para não sobrecarregar o Telegram/WhatsApp.
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            python main.py --once --config config.yaml --notify-empty
+          else
+            python main.py --once --config config.yaml
+          fi
 
       - name: Persistir estado (evita notificações repetidas)
         run: |
