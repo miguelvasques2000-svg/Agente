@@ -1,0 +1,44 @@
+# Configuração do monitor de inventário Tesla.
+# Valores entre ${...} são lidos de variáveis de ambiente (ver .env.example).
+
+tesla:
+  model: my              # my = Model Y, m3 = Model 3, ms = Model S, mx = Model X
+  condition: new         # new ou used
+  market: PT
+  language: pt
+  super_region: europe
+  zip: "3030-325"
+  range: 0               # 0 = apenas o país/mercado indicado, sem raio de entrega
+  lat: 40.2056
+  lng: -8.4196
+  arrangeby: Price
+  order: asc
+  options: {}            # filtros nativos da Tesla (códigos), opcional - normalmente não é preciso
+
+# Critérios que definem "a unidade que eu quero". Cada lista é um OR (basta
+# corresponder a um dos termos); listas vazias = sem restrição nessa categoria.
+# As correspondências são por substring, sem distinguir maiúsculas/minúsculas.
+filters:
+  price_max: null              # ex: 45000
+  price_min: null
+  trim_contains: []            # ex: ["Long Range", "Performance"]
+  exterior_contains: []        # ex: ["Pearl White", "Deep Blue Metallic"]
+  interior_contains: []        # ex: ["All Black"]
+  wheels_contains: []          # ex: ["19\""]  ou ["Gemini"]
+  autopilot_contains: []       # ex: ["Full Self-Driving"]
+
+notify:
+  telegram:
+    enabled: true
+    bot_token: "${TELEGRAM_BOT_TOKEN}"
+    chat_id: "${TELEGRAM_CHAT_ID}"
+  whatsapp_callmebot:
+    enabled: false
+    phone: "${WHATSAPP_PHONE}"
+    apikey: "${CALLMEBOT_APIKEY}"
+
+polling:
+  interval_seconds: 300   # usado apenas no modo de loop contínuo (main.py sem --once)
+
+listing_url: "https://www.tesla.com/pt_PT/inventory/new/my?arrangeby=plh&zip=3030-325&range=0"
+state_file: "state/seen_vehicles.json"
